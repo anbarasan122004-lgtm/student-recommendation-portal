@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Online Calculator</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #eeeeee;
+        }
+
+        .calculator {
+            width: 380px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #999;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #display {
+            width: 95%;
+            height: 50px;
+            font-size: 22px;
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 65px;
+            height: 45px;
+            margin: 4px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .operator {
+            background-color: #eee6e6;
+        }
+
+        .scientific {
+            background-color: #e6e6e6;
+        }
+
+        #steps {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            text-align: left;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        #steps b {
+            font-size: 18px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="calculator">
+
+    <h1>Online Calculator</h1>
+
+
+    <!-- Display -->
+
+    <input
+        type="text"
+        id="display"
+        readonly
+    >
+
+
+    <br>
+
+
+    <!-- Basic Buttons -->
+
+    <button onclick="clearDisplay()">AC</button>
+
+    <button onclick="deleteLast()">DEL</button>
+
+    <button onclick="add('(')">(</button>
+
+    <button onclick="add(')')">)</button>
+
+    <br>
+
+
+    <button onclick="add('7')">7</button>
+
+    <button onclick="add('8')">8</button>
+
+    <button onclick="add('9')">9</button>
+
+    <button class="operator"
+            onclick="add('/')">
+
+        ÷
+
+    </button>
+
+    <br>
+
+
+    <button onclick="add('4')">4</button>
+
+    <button onclick="add('5')">5</button>
+
+    <button onclick="add('6')">6</button>
+
+    <button class="operator"
+            onclick="add('*')">
+
+        ×
+
+    </button>
+
+    <br>
+
+
+    <button onclick="add('1')">1</button>
+
+    <button onclick="add('2')">2</button>
+
+    <button onclick="add('3')">3</button>
+
+    <button class="operator"
+            onclick="add('-')">
+
+        −
+
+    </button>
+
+    <br>
+
+
+    <button onclick="add('0')">0</button>
+
+    <button onclick="add('.')">.</button>
+
+    <button onclick="calculate()">=</button>
+
+    <button class="operator"
+            onclick="add('+')">
+
+        +
+
+    </button>
+
+
+    <br>
+    <br>
+
+
+    <!-- Scientific -->
+
+    <button class="scientific"
+            onclick="square()">
+
+        x²
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="squareRoot()">
+
+        √
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="sinValue()">
+
+        sin
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="cosValue()">
+
+        cos
+
+    </button>
+
+
+    <br>
+
+
+    <button class="scientific"
+            onclick="tanValue()">
+
+        tan
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="logValue()">
+
+        log
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="piValue()">
+
+        π
+
+    </button>
+
+
+    <button class="scientific"
+            onclick="factorial()">
+
+        n!
+
+    </button>
+
+
+    <!-- Steps -->
+
+    <div id="steps">
+
+        <b>Calculation Steps</b>
+
+        <p id="explanation">
+            No calculation yet.
+        </p>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================
+   VARIABLES
+   ===================================== */
+
+let display =
+    document.getElementById("display");
+
+let explanation =
+    document.getElementById("explanation");
+
+
+
+/* =====================================
+   ADD VALUE
+   ===================================== */
+
+function add(value) {
+
+    display.value += value;
+
+}
+
+
+
+/* =====================================
+   CLEAR
+   ===================================== */
+
+function clearDisplay() {
+
+    display.value = "";
+
+    explanation.innerHTML =
+        "No calculation yet.";
+
+}
+
+
+
+/* =====================================
+   DELETE
+   ===================================== */
+
+function deleteLast() {
+
+    display.value =
+        display.value.slice(0, -1);
+
+}
+
+
+
+/* =====================================
+   BASIC CALCULATION
+   ===================================== */
+
+function calculate() {
+
+    let expression =
+        display.value;
+
+
+    try {
+
+        /*
+         * Convert symbols
+         */
+
+        let mathExpression =
+            expression
+                .replace(/×/g, "*")
+                .replace(/÷/g, "/");
+
+
+        /*
+         * Check expression
+         */
+
+        if (mathExpression === "") {
+
+            return;
+
+        }
+
+
+        /*
+         * Generate steps
+         */
+
+        let steps =
+            getCalculationSteps(
+                mathExpression
+            );
+
+
+        /*
+         * Calculate final answer
+         */
+
+        let result =
+            eval(mathExpression);
+
+
+        /*
+         * Show result
+         */
+
+        display.value =
+            result;
+
+
+        /*
+         * Show all steps
+         */
+
+        explanation.innerHTML =
+            "<b>Expression:</b> "
+            +
+            expression
+            +
+            "<br><br>"
+            +
+            steps
+            +
+            "<br>"
+            +
+            "<b>Final Answer: "
+            +
+            result
+            +
+            "</b>";
+
+    }
+
+    catch {
+
+        display.value = "";
+
+        explanation.innerHTML =
+            "Invalid expression.";
+
+    }
+
+}
+
+
+
+/* =====================================
+   CALCULATION STEPS
+   ===================================== */
+
+function getCalculationSteps(expression) {
+
+    let steps = "";
+
+    let stepNumber = 1;
+
+
+    /*
+     * Create a copy
+     */
+
+    let current =
+        expression;
+
+
+    /*
+     * Brackets first
+     */
+
+    while (
+        current.includes("(")
+    ) {
+
+        let start =
+            current.lastIndexOf("(");
+
+
+        let end =
+            current.indexOf(
+                ")",
+                start
+            );
+
+
+        if (end === -1) {
+            break;
+        }
+
+
+        let inside =
+            current.substring(
+                start + 1,
+                end
+            );
+
+
+        let value =
+            eval(inside);
+
+
+        steps +=
+
+            "Step "
+            +
+            stepNumber
+            +
+            ": "
+            +
+            inside
+            +
+            " = "
+            +
+            value
+            +
+            "<br>";
+
+
+        stepNumber++;
+
+
+        current =
+            current.substring(
+                0,
+                start
+            )
+            +
+            value
+            +
+            current.substring(
+                end + 1
+            );
+
+    }
+
+
+    /*
+     * Multiplication and division
+     */
+
+    let regex =
+        /(-?\d+(?:\.\d+)?)\s*([*/])\s*(-?\d+(?:\.\d+)?)/;
+
+
+    while (
+        regex.test(current)
+    ) {
+
+        let match =
+            current.match(regex);
+
+
+        let a =
+            parseFloat(match[1]);
+
+
+        let operator =
+            match[2];
+
+
+        let b =
+            parseFloat(match[3]);
+
+
+        let result;
+
+
+        if (operator === "*") {
+
+            result = a * b;
+
+        }
+
+        else {
+
+            result = a / b;
+
+        }
+
+
+        let symbol =
+            operator === "*"
+            ? "×"
+            : "÷";
+
+
+        steps +=
+
+            "Step "
+            +
+            stepNumber
+            +
+            ": "
+            +
+            a
+            +
+            " "
+            +
+            symbol
+            +
+            " "
+            +
+            b
+            +
+            " = "
+            +
+            result
+            +
+            "<br>";
+
+
+        stepNumber++;
+
+
+        current =
+            current.replace(
+                match[0],
+                result
+            );
+
+    }
+
+
+    /*
+     * Addition and subtraction
+     */
+
+    let addRegex =
+        /(-?\d+(?:\.\d+)?)\s*([+-])\s*(-?\d+(?:\.\d+)?)/;
+
+
+    while (
+        addRegex.test(current)
+    ) {
+
+        let match =
+            current.match(addRegex);
+
+
+        let a =
+            parseFloat(match[1]);
+
+
+        let operator =
+            match[2];
+
+
+        let b =
+            parseFloat(match[3]);
+
+
+        let result;
+
+
+        if (operator === "+") {
+
+            result = a + b;
+
+        }
+
+        else {
+
+            result = a - b;
+
+        }
+
+
+        steps +=
+
+            "Step "
+            +
+            stepNumber
+            +
+            ": "
+            +
+            a
+            +
+            " "
+            +
+            operator
+            +
+            " "
+            +
+            b
+            +
+            " = "
+            +
+            result
+            +
+            "<br>";
+
+
+        stepNumber++;
+
+
+        current =
+            current.replace(
+                match[0],
+                result
+            );
+
+    }
+
+
+    return steps;
+
+}
+
+
+
+/* =====================================
+   SQUARE
+   ===================================== */
+
+function square() {
+
+    let value =
+        Number(display.value);
+
+
+    if (isNaN(value)) {
+
+        alert("Enter a number");
+
+        return;
+
+    }
+
+
+    let result =
+        value * value;
+
+
+    display.value =
+        result;
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> "
+        +
+        value
+        +
+        "²"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: "
+        +
+        value
+        +
+        " × "
+        +
+        value
+        +
+        " = "
+        +
+        result
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   SQUARE ROOT
+   ===================================== */
+
+function squareRoot() {
+
+    let value =
+        Number(display.value);
+
+
+    if (isNaN(value)) {
+
+        alert("Enter a number");
+
+        return;
+
+    }
+
+
+    let result =
+        Math.sqrt(value);
+
+
+    display.value =
+        result;
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> √"
+        +
+        value
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: Find the square root of "
+        +
+        value
+        +
+        "<br>"
+
+        +
+
+        "Step 2: √"
+        +
+        value
+        +
+        " = "
+        +
+        result
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   SIN
+   ===================================== */
+
+function sinValue() {
+
+    let value =
+        Number(display.value);
+
+
+    if (isNaN(value)) {
+
+        alert("Enter a number");
+
+        return;
+
+    }
+
+
+    let radians =
+        value * Math.PI / 180;
+
+
+    let result =
+        Math.sin(radians);
+
+
+    display.value =
+        result.toFixed(4);
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> sin("
+        +
+        value
+        +
+        "°)"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: Convert degrees to radians."
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        value
+        +
+        " × π / 180"
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        radians.toFixed(4)
+        +
+        "<br>"
+
+        +
+
+        "Step 2: sin("
+        +
+        radians.toFixed(4)
+        +
+        ")"
+        +
+        "<br>"
+
+        +
+
+        "Step 3: Result = "
+        +
+        result.toFixed(4)
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result.toFixed(4)
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   COS
+   ===================================== */
+
+function cosValue() {
+
+    let value =
+        Number(display.value);
+
+
+    if (isNaN(value)) {
+
+        alert("Enter a number");
+
+        return;
+
+    }
+
+
+    let radians =
+        value * Math.PI / 180;
+
+
+    let result =
+        Math.cos(radians);
+
+
+    display.value =
+        result.toFixed(4);
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> cos("
+        +
+        value
+        +
+        "°)"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: Convert degrees to radians."
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        value
+        +
+        " × π / 180"
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        radians.toFixed(4)
+        +
+        "<br>"
+
+        +
+
+        "Step 2: Calculate cosine."
+        +
+        "<br>"
+
+        +
+
+        "Step 3: Result = "
+        +
+        result.toFixed(4)
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result.toFixed(4)
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   TAN
+   ===================================== */
+
+function tanValue() {
+
+    let value =
+        Number(display.value);
+
+
+    if (isNaN(value)) {
+
+        alert("Enter a number");
+
+        return;
+
+    }
+
+
+    let radians =
+        value * Math.PI / 180;
+
+
+    let result =
+        Math.tan(radians);
+
+
+    display.value =
+        result.toFixed(4);
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> tan("
+        +
+        value
+        +
+        "°)"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: Convert degrees to radians."
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        value
+        +
+        " × π / 180"
+        +
+        "<br>"
+
+        +
+
+        "Radians = "
+        +
+        radians.toFixed(4)
+        +
+        "<br>"
+
+        +
+
+        "Step 2: Calculate tangent."
+        +
+        "<br>"
+
+        +
+
+        "Step 3: Result = "
+        +
+        result.toFixed(4)
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result.toFixed(4)
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   LOG
+   ===================================== */
+
+function logValue() {
+
+    let value =
+        Number(display.value);
+
+
+    if (
+        isNaN(value)
+        ||
+        value <= 0
+    ) {
+
+        alert(
+            "Enter a positive number"
+        );
+
+        return;
+
+    }
+
+
+    let result =
+        Math.log10(value);
+
+
+    display.value =
+        result;
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> log("
+        +
+        value
+        +
+        ")"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: Find the base-10 logarithm."
+        +
+        "<br>"
+
+        +
+
+        "Step 2: log("
+        +
+        value
+        +
+        ") = "
+        +
+        result
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   PI
+   ===================================== */
+
+function piValue() {
+
+    display.value =
+        Math.PI;
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> π"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: π is a mathematical constant."
+        +
+        "<br>"
+
+        +
+
+        "Step 2: π ≈ 3.141592653589793"
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        Math.PI
+        +
+        "</b>";
+
+}
+
+
+
+/* =====================================
+   FACTORIAL
+   ===================================== */
+
+function factorial() {
+
+    let value =
+        Number(display.value);
+
+
+    if (
+        value < 0
+        ||
+        !Number.isInteger(value)
+    ) {
+
+        alert(
+            "Enter a positive integer"
+        );
+
+        return;
+
+    }
+
+
+    let result = 1;
+
+    let steps = "";
+
+
+    for (
+        let i = value;
+        i >= 1;
+        i--
+    ) {
+
+        result *= i;
+
+        if (i > 1) {
+
+            steps += i + " × ";
+
+        }
+
+        else {
+
+            steps += i;
+
+        }
+
+    }
+
+
+    display.value =
+        result;
+
+
+    explanation.innerHTML =
+
+        "<b>Expression:</b> "
+        +
+        value
+        +
+        "!"
+        +
+        "<br><br>"
+
+        +
+
+        "Step 1: "
+        +
+        value
+        +
+        "! = "
+        +
+        steps
+        +
+        "<br>"
+
+        +
+
+        "Step 2: Result = "
+        +
+        result
+        +
+        "<br><br>"
+
+        +
+
+        "<b>Final Answer: "
+        +
+        result
+        +
+        "</b>";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - CompanyHub</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    
+    <nav class="navbar">
+
+        <div class="logo">
+            COMPANY<span>HUB</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+        </div>
+
+    </nav>
+
+
+    
+    <section class="form-section">
+
+        <div class="form-container">
+
+            <div class="form-heading">
+
+                <p>JOIN OUR COMPANY</p>
+
+                <h1>Create Your Account</h1>
+
+                <span>
+                    Register as an employee or administrator
+                    to access the company portal.
+                </span>
+
+            </div>
+
+
+    
+            <form action="register.php" method="POST" id="registerForm">
+
+        
+                <div class="input-group">
+
+                    <label for="name">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+    
+                <div class="input-group">
+
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+            
+                <div class="input-group">
+
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+            
+                <div class="input-group">
+
+                    <label for="role">Account Type</label>
+
+                    <select id="role" name="role" required>
+
+                        <option value="">Select account type</option>
+
+                        <option value="employee">
+                            Employee
+                        </option>
+
+                        <option value="admin">
+                            Administrator
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            
+                <div class="input-group">
+
+                    <label for="department">Department</label>
+
+                    <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        placeholder="Example: Computer Science"
+                        required
+                    >
+
+                </div>
+
+
+            
+                <button type="submit" class="form-btn">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p class="form-footer">
+                Already have an account?
+                <a href="login.html">Login here</a>
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <p>© 2026 CompanyHub. Employee & Admin Portal.</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

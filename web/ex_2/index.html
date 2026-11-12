@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping Store</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Online Shopping Store</h1>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Offers</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<section class="banner">
+    <h2>Welcome to Our Shopping Store</h2>
+    <p>Best Deals | Lowest Prices | Fast Delivery</p>
+</section>
+
+<section class="products">
+
+    <!-- Product 1 -->
+    <div class="card">
+        <img src="https://www.portronics.com/cdn/shop/files/Portronics_Muff_M3_best_headphones_under_5000.jpg?v=1744893854" alt="Headphones">
+        <h3>Wireless Headphones</h3>
+        <p>Noise Cancellation Bluetooth Headphones</p>
+        <h4>₹2,499</h4>
+        <button onclick="addToCart('Wireless Headphones',2499)">
+            Add to Cart
+        </button>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSAMhP0OJN-n2rd78kFnMj6Y8FRT9w5W3d3w&s" alt="Watch">
+        <h3>Smart Watch</h3>
+        <p>Fitness Tracker with Heart Rate Monitor</p>
+        <h4>₹3,999</h4>
+        <button onclick="addToCart('Smart Watch',3999)">
+            Add to Cart
+        </button>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="card">
+        <img src="https://www.power-x.in/cdn/shop/files/Front.jpg?v=1737709078&width=3000" alt="Mouse">
+        <h3>Gaming Mouse</h3>
+        <p>RGB Wired Gaming Mouse</p>
+        <h4>₹999</h4>
+        <button onclick="addToCart('Gaming Mouse',999)">
+            Add to Cart
+        </button>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="card">
+        <img src="https://media-ik.croma.com/Croma%20Assets/Entertainment/Speakers%20and%20Media%20Players/Images/251614_0_ghxuff.png" alt="Speaker">
+        <h3>Bluetooth Speaker</h3>
+        <p>Portable Waterproof Speaker</p>
+        <h4>₹1,799</h4>
+        <button onclick="addToCart('Bluetooth Speaker',1799)">
+            Add to Cart
+        </button>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="card">
+        <img src="https://m.media-amazon.com/images/I/510uTHyDqGL._AC_UF1000,1000_QL80_.jpg" alt="Laptop">
+        <h3>Laptop</h3>
+        <p>Intel i5 12th Gen | 8GB RAM | 512GB SSD</p>
+        <h4>₹54,999</h4>
+        <button onclick="addToCart('Laptop',54999)">
+            Add to Cart
+        </button>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="card">
+        <img src="https://doiqgxrhp4iii.cloudfront.net/Y28S%205G-TWINKLING%20PU%20(1)a.jpg" alt="Phone">
+        <h3>Mobile Phone</h3>
+        <p>6.7-inch AMOLED Display | 128GB Storage</p>
+        <h4>₹24,999</h4>
+        <button onclick="addToCart('Mobile Phone',24999)">
+            Add to Cart
+        </button>
+    </div>
+
+</section>
+
+<!-- Shopping Cart -->
+<section class="cart">
+
+    <h2>🛒 Shopping Cart</h2>
+
+    <p><strong>Total Items:</strong>
+        <span id="cart-count">0</span>
+    </p>
+
+    <ul id="cart-items"></ul>
+
+    <h3>Total Price: ₹<span id="total-price">0</span></h3>
+
+</section>
+
+<footer>
+    <p>© 2026 Online Shopping Store | MCA Web Technology Lab</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

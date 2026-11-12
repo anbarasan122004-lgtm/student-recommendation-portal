@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Information</title>
+
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #books {
+            width: 500px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .book {
+            background-color: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Book Information</h1>
+
+    <button id="loadBooks">Load Books</button>
+
+    <div id="books"></div>
+
+    <script>
+
+        $(document).ready(function() {
+
+            $("#loadBooks").click(function() {
+
+                $.ajax({
+                    url: "books.json",
+                    type: "GET",
+                    dataType: "json",
+
+                    success: function(data) {
+
+                        $("#books").empty();
+
+                        $.each(data, function(index, book) {
+
+                            $("#books").append(
+                                "<div class='book'>" +
+                                "<h3>Title: " + book.title + "</h3>" +
+                                "<p>Author: " + book.author + "</p>" +
+                                "</div>"
+                            );
+
+                        });
+                    },
+
+                    error: function() {
+
+                        $("#books").html(
+                            "<p>Unable to fetch book data.</p>"
+                        );
+
+                    }
+                });
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

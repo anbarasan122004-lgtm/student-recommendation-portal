@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Information</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #e3f2fd;
+            padding-top: 50px;
+        }
+
+        .container {
+            width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h1 {
+            color: #1565c0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #1565c0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #weather {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Weather Information</h1>
+
+    <button onclick="getWeather()">Get Weather</button>
+
+    <div id="weather">
+        Click the button to get weather information.
+    </div>
+
+</div>
+
+<script>
+
+function getWeather() {
+
+    let url =
+    "https://api.open-meteo.com/v1/forecast?latitude=11.9416&longitude=79.8083&current=temperature_2m,relative_humidity_2m,wind_speed_10m";
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+
+            let temperature = data.current.temperature_2m;
+            let humidity = data.current.relative_humidity_2m;
+            let wind = data.current.wind_speed_10m;
+
+            document.getElementById("weather").innerHTML =
+                "<h2>Pondicherry Weather</h2>" +
+                "<p>Temperature: " + temperature + " °C</p>" +
+                "<p>Humidity: " + humidity + " %</p>" +
+                "<p>Wind Speed: " + wind + " km/h</p>";
+        })
+
+        .catch(error => {
+            document.getElementById("weather").innerHTML =
+                "Unable to fetch weather data.";
+        });
+}
+
+</script>
+
+</body>
+</html>

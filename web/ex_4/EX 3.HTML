@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Smart Quiz</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #141e30,
+                #243b55
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+
+        /* MAIN CONTAINER */
+
+        .quiz {
+            width: 750px;
+            background: #18212b;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+
+        /* TITLE */
+
+        h1 {
+            text-align: center;
+            color: #00ffcc;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+
+        /* TOP INFORMATION */
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+
+        #questionNumber {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+
+        #timer {
+            background: #e53935;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+
+        /* PROGRESS */
+
+        .progress-box {
+            width: 100%;
+            height: 10px;
+            background: #303d4a;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background: #00c49a;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+
+        /* QUESTION BOX */
+
+        .question-box {
+            background: #0c1218;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+
+        #question {
+            font-size: 21px;
+            line-height: 1.5;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+
+        /* OPTIONS */
+
+        .option {
+            background: #2c3a48;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+
+        .option:hover {
+            background: #405263;
+
+            transform: translateX(5px);
+        }
+
+
+        .option.selected {
+            border-color: #00ffcc;
+        }
+
+
+        .option.correct {
+            background: #087f5b;
+
+            border-color: #00ffcc;
+        }
+
+
+        .option.wrong {
+            background: #a52a2a;
+
+            border-color: #ff6b6b;
+        }
+
+
+        .option.disabled {
+            pointer-events: none;
+        }
+
+
+        /* EXPLANATION */
+
+        #feedback {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #18212b;
+
+            line-height: 1.6;
+        }
+
+
+        #feedback.correct-feedback {
+            border-left: 5px solid #00ffcc;
+        }
+
+
+        #feedback.wrong-feedback {
+            border-left: 5px solid #ff6b6b;
+        }
+
+
+        /* BUTTONS */
+
+        .buttons {
+            display: flex;
+
+            gap: 15px;
+
+            margin-top: 20px;
+        }
+
+
+        button {
+            flex: 1;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        button:hover {
+            opacity: 0.85;
+
+            transform: translateY(-2px);
+        }
+
+
+        #previous {
+            background: #673ab7;
+        }
+
+
+        #next {
+            background: #00a884;
+        }
+
+
+        /* START PAGE */
+
+        #start {
+            text-align: center;
+        }
+
+
+        #start .icon {
+            font-size: 70px;
+        }
+
+
+        #start h2 {
+            color: #00ffcc;
+
+            font-size: 30px;
+        }
+
+
+        #start p {
+            color: #aaa;
+
+            line-height: 1.7;
+        }
+
+
+        #start button {
+            background: #00a884;
+
+            width: 200px;
+
+            flex: none;
+        }
+
+
+        /* RESULT */
+
+        #result {
+            display: none;
+
+            text-align: center;
+        }
+
+
+        #result .result-icon {
+            font-size: 70px;
+        }
+
+
+        #result h2 {
+            color: #00ffcc;
+
+            font-size: 30px;
+        }
+
+
+        #score {
+            font-size: 50px;
+
+            color: #ffd166;
+
+            font-weight: bold;
+
+            margin: 20px;
+        }
+
+
+        #message {
+            color: #ccc;
+
+            font-size: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        #restart {
+            background: #673ab7;
+
+            width: 200px;
+
+            flex: none;
+        }
+
+
+        /* MOBILE */
+
+        @media(max-width:600px) {
+
+            .quiz {
+                width: 100%;
+
+                padding: 20px;
+            }
+
+            .info {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="quiz">
+
+
+    <!-- ================================= -->
+    <!-- START SCREEN -->
+    <!-- ================================= -->
+
+    <div id="start">
+
+        <div class="icon">
+            🧠
+        </div>
+
+        <h2>
+            Smart Quiz
+        </h2>
+
+        <p>
+            Test your knowledge with 20 questions.
+        </p>
+
+        <p>
+            🎲 Questions will be shuffled randomly.
+        </p>
+
+        <p>
+            🔀 Options will also be shuffled randomly.
+        </p>
+
+        <p>
+            ⏱️ Time Limit: 10 Minutes
+        </p>
+
+        <button onclick="startQuiz()">
+            Start Quiz
+        </button>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- QUIZ SCREEN -->
+    <!-- ================================= -->
+
+    <div id="quizPage" style="display:none;">
+
+
+        <h1>
+            🧠 Smart Quiz
+        </h1>
+
+
+        <!-- TOP -->
+
+        <div class="info">
+
+            <div id="questionNumber">
+                Question 1 of 20
+            </div>
+
+            <div id="timer">
+                10:00
+            </div>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress-box">
+
+            <div id="progress"></div>
+
+        </div>
+
+
+        <!-- QUESTION -->
+
+        <div class="question-box">
+
+
+            <h2 id="question">
+                Question
+            </h2>
+
+
+            <div id="options">
+            </div>
+
+
+            <!-- FEEDBACK -->
+
+            <div id="feedback">
+            </div>
+
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <button
+                id="previous"
+                onclick="previousQuestion()">
+
+                ← Previous
+
+            </button>
+
+
+            <button
+                id="next"
+                onclick="nextQuestion()">
+
+                Next →
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- RESULT SCREEN -->
+    <!-- ================================= -->
+
+    <div id="result">
+
+
+        <div class="result-icon">
+            🏆
+        </div>
+
+
+        <h2>
+            Quiz Completed!
+        </h2>
+
+
+        <div id="score">
+            0 / 20
+        </div>
+
+
+        <div id="message">
+        </div>
+
+
+        <button
+            id="restart"
+            onclick="restartQuiz()">
+
+            🔄 Restart Quiz
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   QUESTION DATABASE
+   ========================================== */
+
+const questionBank = [
+
+    {
+        question:
+        "What is the capital of India?",
+
+        options: [
+            "Delhi",
+            "Mumbai",
+            "Chennai",
+            "Kolkata"
+        ],
+
+        answer: "Delhi",
+
+        explanation:
+        "Delhi is the capital city of India."
+    },
+
+
+    {
+        question:
+        "Which language is used to create web pages?",
+
+        options: [
+            "HTML",
+            "Python",
+            "Java",
+            "C++"
+        ],
+
+        answer: "HTML",
+
+        explanation:
+        "HTML stands for HyperText Markup Language and is used to structure web pages."
+    },
+
+
+    {
+        question:
+        "Which language is used for web page styling?",
+
+        options: [
+            "CSS",
+            "HTML",
+            "PHP",
+            "SQL"
+        ],
+
+        answer: "CSS",
+
+        explanation:
+        "CSS stands for Cascading Style Sheets and is used to style HTML pages."
+    },
+
+
+    {
+        question:
+        "Which language makes web pages interactive?",
+
+        options: [
+            "JavaScript",
+            "CSS",
+            "HTML",
+            "SQL"
+        ],
+
+        answer: "JavaScript",
+
+        explanation:
+        "JavaScript adds dynamic and interactive behavior to web pages."
+    },
+
+
+    {
+        question:
+        "Which of these is a programming language?",
+
+        options: [
+            "Python",
+            "HTML",
+            "CSS",
+            "XML"
+        ],
+
+        answer: "Python",
+
+        explanation:
+        "Python is a high-level programming language."
+    },
+
+
+    {
+        question:
+        "Which HTML tag is used for a paragraph?",
+
+        options: [
+            "<p>",
+            "<h1>",
+            "<br>",
+            "<div>"
+        ],
+
+        answer: "<p>",
+
+        explanation:
+        "The <p> tag is used to define a paragraph in HTML."
+    },
+
+
+    {
+        question:
+        "Which HTML tag creates a hyperlink?",
+
+        options: [
+            "<a>",
+            "<img>",
+            "<link>",
+            "<url>"
+        ],
+
+        answer: "<a>",
+
+        explanation:
+        "The <a> tag, called the anchor tag, creates hyperlinks."
+    },
+
+
+    {
+        question:
+        "Which symbol represents an ID selector in CSS?",
+
+        options: [
+            "#",
+            ".",
+            "@",
+            "$"
+        ],
+
+        answer: "#",
+
+        explanation:
+        "The # symbol is used to select an element by its ID in CSS."
+    },
+
+
+    {
+        question:
+        "Which symbol represents a class selector in CSS?",
+
+        options: [
+            ".",
+            "#",
+            "@",
+            "&"
+        ],
+
+        answer: ".",
+
+        explanation:
+        "The dot (.) symbol is used to select a class in CSS."
+    },
+
+
+    {
+        question:
+        "Which JavaScript function displays a message?",
+
+        options: [
+            "alert()",
+            "print()",
+            "display()",
+            "message()"
+        ],
+
+        answer: "alert()",
+
+        explanation:
+        "alert() displays a message box in the browser."
+    },
+
+
+    {
+        question:
+        "Which database is commonly used with PHP?",
+
+        options: [
+            "MySQL",
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ],
+
+        answer: "MySQL",
+
+        explanation:
+        "MySQL is a popular relational database used with PHP applications."
+    },
+
+
+    {
+        question:
+        "What does CSS stand for?",
+
+        options: [
+            "Cascading Style Sheets",
+            "Computer Style Sheets",
+            "Creative Style Sheets",
+            "Colorful Style Sheets"
+        ],
+
+        answer:
+        "Cascading Style Sheets",
+
+        explanation:
+        "CSS stands for Cascading Style Sheets."
+    },
+
+
+    {
+        question:
+        "What does HTML stand for?",
+
+        options: [
+            "HyperText Markup Language",
+            "HighText Machine Language",
+            "HyperText Machine Language",
+            "Hyperlink Text Markup Language"
+        ],
+
+        answer:
+        "HyperText Markup Language",
+
+        explanation:
+        "HTML stands for HyperText Markup Language."
+    },
+
+
+    {
+        question:
+        "Which tag is used to display an image?",
+
+        options: [
+            "<img>",
+            "<image>",
+            "<pic>",
+            "<src>"
+        ],
+
+        answer: "<img>",
+
+        explanation:
+        "The <img> tag is used to display images on a webpage."
+    },
+
+
+    {
+        question:
+        "Which keyword can declare a variable in JavaScript?",
+
+        options: [
+            "let",
+            "define",
+            "variable",
+            "declare"
+        ],
+
+        answer: "let",
+
+        explanation:
+        "The let keyword is used to declare a variable in modern JavaScript."
+    },
+
+
+    {
+        question:
+        "Who originally developed JavaScript?",
+
+        options: [
+            "Netscape",
+            "Microsoft",
+            "Google",
+            "Apple"
+        ],
+
+        answer: "Netscape",
+
+        explanation:
+        "JavaScript was originally developed at Netscape by Brendan Eich."
+    },
+
+
+    {
+        question:
+        "Which HTML tag creates the largest heading?",
+
+        options: [
+            "<h1>",
+            "<h6>",
+            "<head>",
+            "<heading>"
+        ],
+
+        answer: "<h1>",
+
+        explanation:
+        "HTML headings range from <h1> to <h6>. The <h1> element represents the highest-level heading."
+    },
+
+
+    {
+        question:
+        "Which attribute specifies the image source?",
+
+        options: [
+            "src",
+            "href",
+            "link",
+            "source"
+        ],
+
+        answer: "src",
+
+        explanation:
+        "The src attribute specifies the URL or path of an image."
+    },
+
+
+    {
+        question:
+        "Which protocol is commonly used to access web pages?",
+
+        options: [
+            "HTTP",
+            "FTP",
+            "SMTP",
+            "SSH"
+        ],
+
+        answer: "HTTP",
+
+        explanation:
+        "HTTP stands for HyperText Transfer Protocol and is used for communication between browsers and web servers."
+    },
+
+
+    {
+        question:
+        "Which language is commonly used for server-side scripting?",
+
+        options: [
+            "PHP",
+            "CSS",
+            "HTML",
+            "XML"
+        ],
+
+        answer: "PHP",
+
+        explanation:
+        "PHP is a server-side scripting language commonly used for dynamic websites."
+    }
+
+];
+
+
+
+/* ==========================================
+   VARIABLES
+   ========================================== */
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let userAnswers = [];
+
+let score = 0;
+
+let timeLeft = 600;
+
+let timer;
+
+
+
+/* ==========================================
+   SHUFFLE FUNCTION
+   ========================================== */
+
+function shuffle(array) {
+
+    for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        let j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        let temp =
+            array[i];
+
+        array[i] =
+            array[j];
+
+        array[j] =
+            temp;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   START QUIZ
+   ========================================== */
+
+function startQuiz() {
+
+
+    /*
+     * Copy questions
+     */
+
+    questions =
+        questionBank.map(function(item) {
+
+            return {
+
+                question:
+                    item.question,
+
+                options:
+                    [...item.options],
+
+                answer:
+                    item.answer,
+
+                explanation:
+                    item.explanation
+
+            };
+
+        });
+
+
+    /*
+     * Shuffle questions
+     */
+
+    shuffle(questions);
+
+
+    /*
+     * Shuffle options
+     */
+
+    questions.forEach(function(item) {
+
+        shuffle(item.options);
+
+    });
+
+
+    /*
+     * Reset values
+     */
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    timeLeft = 600;
+
+    userAnswers =
+        new Array(20).fill(null);
+
+
+    /*
+     * Show quiz
+     */
+
+    document.getElementById(
+        "start"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "quizPage"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "result"
+    ).style.display = "none";
+
+
+    /*
+     * Start timer
+     */
+
+    clearInterval(timer);
+
+    timer =
+        setInterval(function() {
+
+            timeLeft--;
+
+
+            let minutes =
+                Math.floor(
+                    timeLeft / 60
+                );
+
+
+            let seconds =
+                timeLeft % 60;
+
+
+            document.getElementById(
+                "timer"
+            ).innerHTML =
+
+                minutes
+                +
+                ":"
+                +
+                String(seconds)
+                    .padStart(2, "0");
+
+
+            if (timeLeft <= 0) {
+
+                clearInterval(timer);
+
+                finishQuiz();
+
+            }
+
+        }, 1000);
+
+
+    /*
+     * Display first question
+     */
+
+    showQuestion();
+
+}
+
+
+
+/* ==========================================
+   SHOW QUESTION
+   ========================================== */
+
+function showQuestion() {
+
+
+    let item =
+        questions[currentQuestion];
+
+
+    /*
+     * Question number
+     */
+
+    document.getElementById(
+        "questionNumber"
+    ).innerHTML =
+
+        "Question "
+        +
+        (currentQuestion + 1)
+        +
+        " of "
+        +
+        questions.length;
+
+
+    /*
+     * Progress
+     */
+
+    let percentage =
+
+        (
+            (currentQuestion + 1)
+            /
+            questions.length
+        )
+        *
+        100;
+
+
+    document.getElementById(
+        "progress"
+    ).style.width =
+        percentage + "%";
+
+
+    /*
+     * Question text
+     */
+
+    document.getElementById(
+        "question"
+    ).textContent =
+        item.question;
+
+
+    /*
+     * Options container
+     */
+
+    let optionsBox =
+        document.getElementById(
+            "options"
+        );
+
+
+    optionsBox.innerHTML = "";
+
+
+    /*
+     * Create options
+     */
+
+    item.options.forEach(
+        function(option) {
+
+
+            let div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "option";
+
+
+            /*
+             * IMPORTANT:
+             * textContent prevents
+             * <h1>, <p>, etc.
+             * from being treated as HTML.
+             */
+
+            div.textContent =
+                option;
+
+
+            /*
+             * Previous answer
+             */
+
+            if (
+                userAnswers[
+                    currentQuestion
+                ]
+                ===
+                option
+            ) {
+
+                div.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            /*
+             * If this question was
+             * already answered,
+             * show correct/wrong
+             */
+
+            if (
+                userAnswers[
+                    currentQuestion
+                ] !== null
+            ) {
+
+                div.classList.add(
+                    "disabled"
+                );
+
+
+                if (
+                    option === item.answer
+                ) {
+
+                    div.classList.add(
+                        "correct"
+                    );
+
+                }
+
+
+                if (
+                    option ===
+                    userAnswers[
+                        currentQuestion
+                    ]
+                    &&
+                    option !== item.answer
+                ) {
+
+                    div.classList.add(
+                        "wrong"
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * Click option
+             */
+
+            div.onclick =
+                function() {
+
+                    selectAnswer(
+                        option,
+                        div
+                    );
+
+                };
+
+
+            optionsBox.appendChild(div);
+
+        }
+    );
+
+
+    /*
+     * Feedback
+     */
+
+    showFeedback();
+
+
+    /*
+     * Previous button
+     */
+
+    if (currentQuestion === 0) {
+
+        document.getElementById(
+            "previous"
+        ).style.visibility =
+            "hidden";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "previous"
+        ).style.visibility =
+            "visible";
+
+    }
+
+
+    /*
+     * Next button
+     */
+
+    if (
+        currentQuestion ===
+        questions.length - 1
+    ) {
+
+        document.getElementById(
+            "next"
+        ).textContent =
+            "Submit ✓";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "next"
+        ).textContent =
+            "Next →";
+
+    }
+
+}
+
+
+
+/* ==========================================
+   SELECT ANSWER
+   ========================================== */
+
+function selectAnswer(
+    answer,
+    selectedElement
+) {
+
+
+    /*
+     * Prevent changing answer
+     * after selection
+     */
+
+    if (
+        userAnswers[
+            currentQuestion
+        ] !== null
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Save answer
+     */
+
+    userAnswers[
+        currentQuestion
+    ] = answer;
+
+
+    let item =
+        questions[currentQuestion];
+
+
+    /*
+     * Get all options
+     */
+
+    let allOptions =
+        document.querySelectorAll(
+            ".option"
+        );
+
+
+    /*
+     * Disable options
+     */
+
+    allOptions.forEach(
+        function(option) {
+
+            option.classList.add(
+                "disabled"
+            );
+
+
+            /*
+             * Correct answer
+             */
+
+            if (
+                option.textContent
+                ===
+                item.answer
+            ) {
+
+                option.classList.add(
+                    "correct"
+                );
+
+            }
+
+
+            /*
+             * Wrong selected answer
+             */
+
+            if (
+                option.textContent
+                === answer
+                &&
+                answer !== item.answer
+            ) {
+
+                option.classList.add(
+                    "wrong"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Show feedback
+     */
+
+    showFeedback();
+
+
+}
+
+
+
+/* ==========================================
+   SHOW FEEDBACK
+   ========================================== */
+
+function showFeedback() {
+
+
+    let feedback =
+        document.getElementById(
+            "feedback"
+        );
+
+
+    let answer =
+        userAnswers[
+            currentQuestion
+        ];
+
+
+    /*
+     * No answer yet
+     */
+
+    if (answer === null) {
+
+        feedback.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    let item =
+        questions[currentQuestion];
+
+
+    feedback.style.display =
+        "block";
+
+
+    /*
+     * Correct
+
+     */
+
+    if (
+        answer === item.answer
+    ) {
+
+        feedback.className =
+            "correct-feedback";
+
+
+        feedback.innerHTML =
+
+            "✅ <b>Correct!</b><br><br>"
+            +
+            "<b>Explanation:</b> "
+            +
+            item.explanation;
+
+    }
+
+
+    /*
+     * Wrong
+     */
+
+    else {
+
+        feedback.className =
+            "wrong-feedback";
+
+
+        feedback.innerHTML =
+
+            "❌ <b>Wrong Answer</b><br><br>"
+            +
+            "<b>Correct Answer:</b> "
+            +
+            item.answer
+            +
+            "<br><br>"
+            +
+            "<b>Explanation:</b> "
+            +
+            item.explanation;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   NEXT QUESTION
+   ========================================== */
+
+function nextQuestion() {
+
+
+    /*
+     * Must select answer
+     */
+
+    if (
+        userAnswers[
+            currentQuestion
+        ] === null
+    ) {
+
+        alert(
+            "Please select an answer."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Last question
+     */
+
+    if (
+        currentQuestion
+        ===
+        questions.length - 1
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
+
+    currentQuestion++;
+
+    showQuestion();
+
+}
+
+
+
+/* ==========================================
+   PREVIOUS QUESTION
+   ========================================== */
+
+function previousQuestion() {
+
+
+    if (
+        currentQuestion > 0
+    ) {
+
+        currentQuestion--;
+
+        showQuestion();
+
+    }
+
+}
+
+
+
+/* ==========================================
+   FINISH QUIZ
+   ========================================== */
+
+function finishQuiz() {
+
+
+    clearInterval(timer);
+
+
+    score = 0;
+
+
+    /*
+     * Calculate score
+     */
+
+    for (
+        let i = 0;
+        i < questions.length;
+        i++
+    ) {
+
+        if (
+            userAnswers[i]
+            ===
+            questions[i].answer
+        ) {
+
+            score++;
+
+        }
+
+    }
+
+
+    /*
+     * Hide quiz
+     */
+
+    document.getElementById(
+        "quizPage"
+    ).style.display =
+        "none";
+
+
+    /*
+     * Show result
+     */
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    /*
+     * Display score
+     */
+
+    document.getElementById(
+        "score"
+    ).textContent =
+
+        score
+        +
+        " / "
+        +
+        questions.length;
+
+
+    /*
+     * Percentage
+
+     */
+
+    let percentage =
+        (score / questions.length)
+        * 100;
+
+
+    let message;
+
+
+    if (percentage >= 90) {
+
+        message =
+            "Excellent! 🏆 You have excellent knowledge.";
+
+    }
+
+    else if (percentage >= 70) {
+
+        message =
+            "Very Good! 🎉 Keep it up.";
+
+    }
+
+    else if (percentage >= 50) {
+
+        message =
+            "Good Attempt! 👍 Keep practicing.";
+
+    }
+
+    else {
+
+        message =
+            "Keep Practicing! 📚 You can improve.";
+
+    }
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        message;
+
+}
+
+
+
+/* ==========================================
+   RESTART
+   ========================================== */
+
+function restartQuiz() {
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "start"
+    ).style.display =
+        "block";
+
+}
+
+
+
+/* ==========================================
+   KEYBOARD SUPPORT
+   ========================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        /*
+         * Enter = Next
+         */
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            if (
+                document.getElementById(
+                    "quizPage"
+                ).style.display
+                !==
+                "none"
+            ) {
+
+                nextQuestion();
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>
